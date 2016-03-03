@@ -1,0 +1,63 @@
+.background {
+  fill: #eeeeee;
+}
+.client, .server {
+  fill: #dedede;
+}
+.clientblock {
+  fill: #ffffff;
+  stroke: #000000;
+  fill-opacity: 0.5;
+}
+.blockid {
+  fill-opacity: 0.5;
+}
+.blockid:hover {
+  cursor: pointer;
+  fill-opacity: 0.8;
+  stroke-width: 4;
+}
+.treebucket {
+  fill: #ffffff;
+  fill-opacity: 0.5;
+  stroke: #000000;
+}
+.treeblock {
+  fill: #dddddd;
+  fill-opacity: 0.5;
+  stroke: #000000;
+}
+.highlighted {
+  fill: #ffffff;
+  fill-opacity: 0.5;
+  stroke: #000000;
+  animation-name: highlight;
+  animation-duration: 0.99s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+@keyframes highlight {
+  0% {stroke-width: 1;}
+  50% {stroke-width: 3;}
+  100% {stroke-width: 1;}
+}
+@-webkit-keyframes highlight {
+  0% {stroke-width: 1;}
+  50% {stroke-width: 3;}
+  100% {stroke-width: 1;}
+}
+.title1 {
+  font: 20px arial, sans-serif;
+}
+.title2 {
+  font: 16px arial, sans-serif;
+}
+.title3 {
+  font: 12px arial, sans-serif;
+}
+.clienttext {
+  font: 16px arial, sans-serif;
+}
+.treetext {
+  font: 16px Monaco, monospace;
+}

@@ -281,7 +281,8 @@
           currX - 0.5*padding - 0.5*blockIDWidth, 
           currY + 0.5*clientBlockHeight, 
           item.toString(), 
-          "clienttext datablock" + item.toString());
+          // "clienttext datablock" + item.toString());
+          "clienttext");
         
         // add new event listener for the block ID
         document.getElementById("blockid" + item.toString()).addEventListener('click',accessBlock);
@@ -333,7 +334,7 @@
           currX + 0.5*stashItemWidth, 
           currY + 0.5*clientBlockHeight + i*(clientBlockHeight + padding), 
           "(" + stash[i].toString() + ",data)" , 
-          "clienttext datablock" +  stash[i]);
+          "clienttext");
       }
     }
 
@@ -438,9 +439,9 @@
 
           var currBlockName = currBucketName + "-" + currBlock.toString();
           
-          // class should be either "treetext" or "treetext datablock##"
-          if (document.getElementById(currBlockName + "text").getAttribute("class").length > 8) {
-            blockData = document.getElementById(currBlockName + "text").getAttribute("class").substring(18);
+          // class should be either "treeblock" or "treeblock datablock##"
+          if (document.getElementById(currBlockName).getAttribute("class").length > 9) {
+            blockData = document.getElementById(currBlockName).getAttribute("class").substring(19);
 
             // if it's not dummy data, add it to the stash
             if (Number(blockData) < 0 || Number(blockData) >= numBlocks) { return; }
@@ -450,7 +451,6 @@
 
           // "empty" the block
           document.getElementById(currBlockName + "text").textContent = "00000000";
-          document.getElementById(currBlockName + "text").setAttributeNS(null,"class","treetext");
           document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock");
         }
 
@@ -509,7 +509,7 @@
             stashElementsToRemove.push(indexBlockToWrite);
             var blockToWrite = stash[indexBlockToWrite];
             document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock datablock" + blockToWrite);
-            document.getElementById(currBlockName + "text").setAttributeNS(null,"class","treetext datablock" + blockToWrite);
+            document.getElementById(currBlockName + "text").setAttributeNS(null,"class","treetext");
           } else {
             // dummy data block
             document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock");
@@ -596,7 +596,7 @@
       var theText = document.createTextNode(text);
       newText.setAttributeNS(null,"id",textID);
       newText.setAttributeNS(null,"text-anchor","middle");
-      newText.setAttributeNS(null,"alignment-baseline","central");
+      newText.setAttributeNS(null,"dominant-baseline","central");
       newText.setAttributeNS(null,"x",centerX);
       newText.setAttributeNS(null,"y",centerY);
       newText.setAttributeNS(null,"class",textClass);

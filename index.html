@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8" />
   <title>Path ORAM simulation</title>
   <style type="text/css">
     canvas {
@@ -31,10 +32,10 @@
     <!-- "return false" is necessary to prevent page refresh -->
     <form onsubmit="updateORAM(); return false">
       <label for="numBlocks">Total number of data blocks to store (N):</label>
-      <input id="numBlocks" type="number" min="1" max="64" value="8" /> <br /><br />
+      <input id="numBlocks" type="number" min="1" max="64" value="8" /><br /><br />
       <label for="blocksPerTreeBucket">Number of data blocks per bucket (Z):</label>
       <input id="blocksPerTreeBucket" type="number" min="1" max="4" value="4" />
-      <input id="goButton" type="submit" value="Go!" /> 
+      <input id="goButton" type="submit" value="Go!" />
     </form>
 
     <p>The number of levels of the tree is the ceiling of the base-2 logarithm of N (which makes sense when Z=3 or 4... What about when Z is something else?)</p>
@@ -56,7 +57,7 @@
       @import url(svg-datablock-colors.css); /* must be second */
     </style>
 
-    <rect id="svgbackground" width="100%" height="100%" class="background" />
+    <rect id="svgbackground" class="background" width="100%" height="100%" />
     <rect id="clientbackground" class="client background" rx="5" ry="5" />
     <rect id="serverbackground" class="server background" rx="5" ry="5" />
     

@@ -289,9 +289,6 @@ function drawTree() {
       createBucket("treebucket-" + level.toString() + "-" + blockNum.toString(), 
         currRowX + blockNum*(treeBucketWidth + currBucketDistance), 
         currRowY, 
-        blocksPerTreeBucket, 
-        treeBlockWidth, 
-        treeBlockHeight, 
         "treebucket", 
         "treeblock");
     }
@@ -464,20 +461,20 @@ function writePath(leaf) {
 // blocks are in each column of the position map, in the stash, 
 // and in all tree buckets
 // coordinates are upper left
-function createBlock(bID, bX, bY, bWidth, bHeight, bClass) {
+function createBlock(blockID, blockX, blockY, blockWidth, blockHeight, blockClass) {
 
   var newBlock = document.createElementNS(svguri,"rect"); 
-  newBlock.setAttributeNS(null,"id",bID);
-  newBlock.setAttributeNS(null,"x",bX);
-  newBlock.setAttributeNS(null,"y",bY);
+  newBlock.setAttributeNS(null,"id",blockID);
+  newBlock.setAttributeNS(null,"x",blockX);
+  newBlock.setAttributeNS(null,"y",blockY);
   newBlock.setAttributeNS(null,"rx",4);
   newBlock.setAttributeNS(null,"ry",4);
-  newBlock.setAttributeNS(null,"width",bWidth);
-  newBlock.setAttributeNS(null,"height",bHeight);
-  newBlock.setAttributeNS(null,"class",bClass);
+  newBlock.setAttributeNS(null,"width",blockWidth);
+  newBlock.setAttributeNS(null,"height",blockHeight);
+  newBlock.setAttributeNS(null,"class",blockClass);
 
   // if this block is part of the stash, put it in the stash container
-  if (bID.substring(0,5) == "stash") {
+  if (blockID.substring(0,5) == "stash") {
     document.getElementById("stashcontainer").appendChild(newBlock);  
   } else {
     document.getElementById("oramcontainer").appendChild(newBlock);
@@ -485,20 +482,17 @@ function createBlock(bID, bX, bY, bWidth, bHeight, bClass) {
 }
 
 // buckets are nodes in the tree
-function createBucket(id, x, y, numBlocks, blockWidth, blockHeight, bucketClass, blockClass) {
-
-  var bucketWidth = blockWidth + 2*padding;
-  var bucketHeight = padding + numBlocks*(blockHeight + padding);
+function createBucket(bucketID, x, y) {
 
   var newBucket = document.createElementNS(svguri,"rect"); 
-  newBucket.setAttributeNS(null,"id",id);
+  newBucket.setAttributeNS(null,"id",bucketID);
   newBucket.setAttributeNS(null,"x",x);
   newBucket.setAttributeNS(null,"y",y);
   newBucket.setAttributeNS(null,"rx",4);
   newBucket.setAttributeNS(null,"ry",4);
-  newBucket.setAttributeNS(null,"width",bucketWidth);
-  newBucket.setAttributeNS(null,"height",bucketHeight);
-  newBucket.setAttributeNS(null,"class",bucketClass);
+  newBucket.setAttributeNS(null,"width",treeBucketWidth);
+  newBucket.setAttributeNS(null,"height",treeBucketHeight);
+  newBucket.setAttributeNS(null,"class","treebucket");
 
   document.getElementById("oramcontainer").appendChild(newBucket);
 
@@ -506,16 +500,17 @@ function createBucket(id, x, y, numBlocks, blockWidth, blockHeight, bucketClass,
   x += padding;
   y += padding;
 
-  for (var i = 0; i < numBlocks; i++) {
-    createBlock(id + "-" + i.toString(), 
-      x, 
-      y + i*(blockHeight + padding), 
-      blockWidth, 
-      blockHeight, 
-      blockClass);
-    writeCenteredText(id + "-" + i.toString() + "text", 
-      x + 0.5*treeBlockWidth, 
-      y + 0.5*blockHeight + i*(blockHeight + padding), 
+  for (var i = 0; i < blocksPerTreeBucket; i++) {
+    createBlock(bucketID + "-" + i.toString(),
+      x,
+      y + i*(treeBlockHeight + padding),
+      treeBlockWidth,
+      treeBlockHeight,
+      "treeblock");
+
+    writeCenteredText(bucketID + "-" + i.toString() + "text",
+      x + 0.5*treeBlockWidth,
+      y + 0.5*treeBlockHeight + i*(treeBlockHeight + padding),
       randomHex(), "treetext");
   }
 }

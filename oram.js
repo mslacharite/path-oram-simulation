@@ -322,9 +322,9 @@ function highlightPath(leaf) {
       currLeaf.toString();
     document.getElementById(currBucketName).setAttributeNS(null, "class", "treebucket highlighted");
   
-    // shift bits to the right, filling in with 0s on left
+    // shift bits to the right
     // kth node on level i is (k>>1)th node on level i-1
-    currLeaf = currLeaf>>>1;
+    currLeaf = currLeaf>>1;
   }
 }
 
@@ -394,9 +394,9 @@ function readPath(leaf) {
       document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock");
     }
 
-    // shift bits to the right, filling in with 0s on left
+    // shift bits to the right
     // kth node on level i is (k>>1)th node on level i-1
-    currLeaf = currLeaf>>>1;
+    currLeaf = currLeaf>>1;
   }
 }
 
@@ -436,8 +436,8 @@ function writePath(leaf) {
 
     // check if any elements in the stash intersect this path at this level
     for (var i = 0; i < stash.length; i++) {
-      if ( leaf>>>(numLevels-1-currLevel) == 
-           ( (posMap[stash[i]])>>>(numLevels-1-currLevel) ) ) {
+      if ( leaf>>(numLevels-1-currLevel) ==
+           ( (posMap[stash[i]])>>(numLevels-1-currLevel) ) ) {
           eligibleBlocks.push(i);
       }
     }
@@ -446,7 +446,7 @@ function writePath(leaf) {
     for (var currBlock = 0; currBlock < blocksPerTreeBucket; currBlock++){
 
       var currBlockName = "treebucket-" + currLevel.toString() + "-" + 
-        (leaf>>>(numLevels-1-currLevel)).toString() + "-" + 
+        (leaf>>(numLevels-1-currLevel)).toString() + "-" +
           currBlock.toString();
       var EncBlockValue = randomHex();
       

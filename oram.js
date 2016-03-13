@@ -95,10 +95,10 @@ function updateORAM() {
 function initialize() {
 
   // update number of data blocks
-  numBlocks = Number(document.getElementById("numBlocks").value);
+  numBlocks = Number( $("#numBlocks").val() );
 
   // update number of blocks per bucket
-  blocksPerTreeBucket = Number(document.getElementById("blocksPerTreeBucket").value);
+  blocksPerTreeBucket = Number( $("#blocksPerTreeBucket").val() );
   treeBucketHeight = padding + blocksPerTreeBucket * 
     (treeBlockHeight + padding);
 
@@ -117,9 +117,7 @@ function initialize() {
   // remove old position map, stash, and tree
   posMap = [];
   stash = [];
-  while (document.getElementById("oramcontainer").firstChild) {
-    document.getElementById("oramcontainer").removeChild(document.getElementById("oramcontainer").firstChild);
-  }
+  $("#oramcontainer").empty();
 
   // update the position map, fill it with random numbers
   clientHeight = padding + title2Height + padding + title3Height + padding + 
@@ -129,10 +127,9 @@ function initialize() {
   }
 
   // update SVG to fit tree and position map
-  document.getElementById("oram").setAttributeNS(null, "width", serverX + 
-    serverWidth + bigPadding);
-  document.getElementById("oram").setAttributeNS(null, "height", clientY + 
-    Math.max(clientHeight, serverHeight) + bigPadding);
+  $("#oram").width(serverX + serverWidth + bigPadding);
+  $("#oram").height(clientY + Math.max(clientHeight, serverHeight) + bigPadding);
+
 
   // add client and server titles
   writeCenteredText("clienttitle",
@@ -148,15 +145,8 @@ function initialize() {
     "title1");
 
   // update backgrounds of client and server
-  document.getElementById("clientbackground").setAttributeNS(null, "width", clientWidth);
-  document.getElementById("clientbackground").setAttributeNS(null, "height", clientHeight);
-  document.getElementById("clientbackground").setAttributeNS(null, "x", clientX);
-  document.getElementById("clientbackground").setAttributeNS(null, "y", clientY);
-
-  document.getElementById("serverbackground").setAttributeNS(null, "width", serverWidth);
-  document.getElementById("serverbackground").setAttributeNS(null, "height", serverHeight);
-  document.getElementById("serverbackground").setAttributeNS(null, "x", serverX);
-  document.getElementById("serverbackground").setAttributeNS(null, "y", serverY);
+  $("#clientbackground").width(clientWidth).height(clientHeight).attr("x", clientX).attr("y", clientY);
+  $("#serverbackground").width(serverWidth).height(serverHeight).attr("x", serverX).attr("y", serverY);
 }
 
 // initial filling of the tree, done by simulating accessing each block
@@ -247,9 +237,7 @@ function drawPosMap() {
 function drawStash() {
 
   // remove old stash
-  while (document.getElementById("stashcontainer").firstChild) {
-    document.getElementById("stashcontainer").removeChild(document.getElementById("stashcontainer").firstChild);
-  }
+  $("#stashcontainer").empty();
 
   writeCenteredText("stashtitle", 
     stashX + 0.5 * stashWidth, 
@@ -320,7 +308,7 @@ function highlightPath(leaf) {
   for (var currLevel = numLevels-1; currLevel >= 0; currLevel--) {
     var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
       currLeaf.toString();
-    document.getElementById(currBucketName).setAttributeNS(null, "class", "treebucket highlighted");
+    $("#" + currBucketName).addClass("highlighted");
   
     // shift bits to the right
     // kth node on level i is (k>>1)th node on level i-1
@@ -335,7 +323,7 @@ function clearHighlightedPaths() {
     for (var currLeaf = 0; currLeaf < Math.pow(2, currLevel); currLeaf++) {
       var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
         currLeaf.toString();
-      document.getElementById(currBucketName).setAttributeNS(null, "class", "treebucket");
+      $("#" + currBucketName).removeClass("highlighted");
     }
   }
 }
@@ -372,7 +360,7 @@ function readPath(leaf) {
     
     var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
       currLeaf.toString();
-    document.getElementById(currBucketName).setAttributeNS(null, "class", "highlighted");
+    $("#" + currBucketName).addClass("highlighted");
 
     // read blocks in the current bucket from top to bottom
     for (var currBlock = 0; currBlock < blocksPerTreeBucket; currBlock++){
@@ -380,8 +368,8 @@ function readPath(leaf) {
       var currBlockName = currBucketName + "-" + currBlock.toString();
       
       // class should be either "treeblock" or "treeblock datablock##"
-      if (document.getElementById(currBlockName).getAttribute("class").length > 9) {
-        blockData = document.getElementById(currBlockName).getAttribute("class").substring(19);
+      if ($("#" + currBlockName).attr("class").length > 9) {
+        blockData = $("#" + currBlockName).attr("class").substring(19);
 
         // if it's not dummy data, add it to the stash
         if (Number(blockData) < 0 || Number(blockData) >= numBlocks) { return; }
@@ -389,9 +377,9 @@ function readPath(leaf) {
         drawStash();
       }
 
-      // "empty" the block
-      document.getElementById(currBlockName + "text").textContent = "00000000";
-      document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock");
+      // "empty" the block, removing all classes in case it contained real data
+      $("#" + currBlockName + "text").text("00000000");
+      $("#" + currBlockName).removeClass().addClass("treeblock");
     }
 
     // shift bits to the right
@@ -406,13 +394,15 @@ function updatePosMap(blockID) {
   if (debug) { console.log("updatePosMap: block ID " + blockID); }
 
   // highlight entry in posmap
-  document.getElementById("assignedleaf" + blockID).setAttributeNS(null, "class", "highlighted");
+  $("#assignedleaf" + blockID).addClass("highlighted");
   // remap the block
   posMap[blockID] = Math.floor(Math.random() * numLeaves);
-  document.getElementById("assignedleaf" + blockID + "text").textContent = posMap[blockID];
+  $("#assignedleaf" + blockID + "text").text(posMap[blockID]);
 
   // remove highlight from entry in posmap
-  setTimeout(function () {document.getElementById("assignedleaf" + blockID).setAttributeNS(null, "class", "clientblock"); }, 1000, blockID);
+  setTimeout(function () {
+    $("#assignedleaf" + blockID).removeClass("highlighted");
+  }, 1000, blockID);
 }
 
 // using blocks from the stash, write a path back to the tree
@@ -448,21 +438,20 @@ function writePath(leaf) {
       var currBlockName = "treebucket-" + currLevel.toString() + "-" + 
         (leaf>>(numLevels-1-currLevel)).toString() + "-" +
           currBlock.toString();
-      var EncBlockValue = randomHex();
+      var encBlockValue = randomHex();
       
       if (eligibleBlocks.length > 0) {
         // real data block
         var indexBlockToWrite = eligibleBlocks.shift();
         stashElementsToRemove.push(indexBlockToWrite);
         var blockToWrite = stash[indexBlockToWrite];
-        document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock datablock" + blockToWrite);
-        document.getElementById(currBlockName + "text").setAttributeNS(null, "class", "treetext");
+        $("#" + currBlockName).addClass("datablock" + blockToWrite);
       } else {
         // dummy data block
-        document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock");
-        document.getElementById(currBlockName + "text").setAttributeNS(null, "class", "treetext");
+        $("#" + currBlockName).addClass("treeblock");
       }
-      document.getElementById(currBlockName + "text").textContent = EncBlockValue;
+
+      $("#" + currBlockName + "text").addClass("treetext").text(encBlockValue);
     } // bucket is now full
 
     // update stash--remove elements that were written

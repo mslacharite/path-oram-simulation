@@ -23,22 +23,32 @@
   <div id="textcontainer">
     <h1>Path ORAM simulation</h1>
 
-    <p>Path ORAM (<a href="https://eprint.iacr.org/2013/280">eprint</a>, <a href="https://dl.acm.org/citation.cfm?id=2516660">ACM DL</a>) is an "extremely simple oblivious RAM protocol" by Stefanov et al., presented at CCS 2013.</p>
+    <p>Path ORAM (<a href="https://eprint.iacr.org/2013/280">eprint</a>, 
+    <a href="https://dl.acm.org/citation.cfm?id=2516660">ACM DL</a>) 
+    is an "extremely simple oblivious RAM protocol" by Stefanov et al., 
+    presented at CCS 2013.</p>
 
-    <p>In path ORAM, the client stores a position map and a stash (which is usually empty after each block access), while the server stores a tree where each node is a bucket of blocks.</p>
+    <p>In path ORAM, the client stores a position map and a stash (which is 
+    usually empty after each block access), while the server stores a tree 
+    where each node is a bucket of blocks.</p>
 
-    <h3>1. Pick how many blocks to store (1-64) and how many blocks per bucket (1-4).</h3>
+    <h3>1. Pick how many blocks to store (1-64) and how many blocks per bucket 
+    (1-4).</h3>
     
     <!-- "return false" is necessary to prevent page refresh -->
     <form onsubmit="updateORAM(); return false">
       <label for="numBlocks">Total number of data blocks to store (N):</label>
-      <input id="numBlocks" type="number" min="1" max="64" value="8" /><br /><br />
-      <label for="blocksPerTreeBucket">Number of data blocks per bucket (Z):</label>
+      <input id="numBlocks" type="number" min="1" max="64" value="8" />
+      <br /><br />
+      <label for="blocksPerTreeBucket">Number of data blocks per bucket (Z):
+        </label>
       <input id="blocksPerTreeBucket" type="number" min="1" max="4" value="4" />
       <input id="goButton" type="submit" value="Go!" />
     </form>
 
-    <p>The number of levels of the tree is the ceiling of the base-2 logarithm of N (which makes sense when Z=3 or 4... What about when Z is something else?)</p>
+    <p>The number of levels of the tree is the ceiling of the base-2 logarithm 
+    of N (which makes sense when Z=3 or 4... What about when Z is something 
+    else?)</p>
 
     <h3>2. Click on a block ID in the position map to access that block.</h3>
 
@@ -47,7 +57,8 @@
       probabilistically encrypted. 
       In this simulation, the hex strings in the tree represent this encrypted 
       data.
-      The colours correspond to the underlying block: real blocks are coloured and dummy blocks are grey. </p>
+      The colours correspond to the underlying block: real blocks are coloured 
+      and dummy blocks are grey. </p>
   </div>
 
   <svg id="oram" version="1.1" xmlns="http://www.w3.org/2000/svg" 

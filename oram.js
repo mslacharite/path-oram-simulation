@@ -19,19 +19,19 @@ var blocksPerTreeBucket; // set in form
 var title1Height = 30;
 var title2Height = 20;
 var title3Height = 25;
-var bigpadding = 16; // padding between in svg and between client and server
+var bigPadding = 16; // padding between client and server
 var padding = 8; // other padding
 
 // CLIENT
 
-var clientX = startX + bigpadding;
+var clientX = startX + bigPadding;
 var clientY = startY + padding + title1Height + padding;
+var clientBlockHeight = 25;
 
 // position map
 
 var posMap = [];
 var posMapTitle = "Position map";
-var clientBlockHeight = 25;
 var posMapX = clientX + padding;
 var posMapY = clientY + padding;
 var blockIDTitle      = ["Block", "ID"]; // multi-line
@@ -54,7 +54,7 @@ var clientHeight; // depends on form values
 
 // SERVER
 
-var serverX = clientX + clientWidth + bigpadding;
+var serverX = clientX + clientWidth + bigPadding;
 var serverY = clientY;
 
 var serverWidth; // depends on form values
@@ -69,7 +69,7 @@ var vertLevelDistance   = 20;
 var horizBucketDistance = 10; // on lowest level
 
 var treeBucketHeight;
-var treeBucketWidth  = treeBlockWidth + 2*padding;
+var treeBucketWidth  = treeBlockWidth + 2 * padding;
 var treeX = serverX + padding;
 var treeY = serverY + padding;
 
@@ -99,16 +99,20 @@ function initialize() {
 
   // update number of blocks per bucket
   blocksPerTreeBucket = Number(document.getElementById("blocksPerTreeBucket").value);
-  treeBucketHeight = padding + blocksPerTreeBucket*(treeBlockHeight + padding);
+  treeBucketHeight = padding + blocksPerTreeBucket * 
+    (treeBlockHeight + padding);
 
   // update number of levels in tree, number of leaves, 
   // total height and width
   numLevels = 1 + Math.ceil(Math.log2(numBlocks));
   numLeaves = Math.pow(2, numLevels - 1);
-  totalTreeHeight = (treeBucketHeight + vertLevelDistance)*numLevels - vertLevelDistance;
-  totalTreeWidth = Math.pow(2,numLevels-1)*(treeBucketWidth + horizBucketDistance) - horizBucketDistance;
-  serverWidth = totalTreeWidth + 2*padding;
-  serverHeight = padding + title2Height + padding + title3Height + padding + totalTreeHeight + padding;
+  totalTreeHeight = (treeBucketHeight + vertLevelDistance) * numLevels - 
+    vertLevelDistance;
+  totalTreeWidth = Math.pow(2, numLevels - 1) * (treeBucketWidth + 
+    horizBucketDistance) - horizBucketDistance;
+  serverWidth = totalTreeWidth + 2 * padding;
+  serverHeight = padding + title2Height + padding + title3Height + padding + 
+    totalTreeHeight + padding;
 
   // remove old position map, stash, and tree
   posMap = [];
@@ -118,25 +122,28 @@ function initialize() {
   }
 
   // update the position map, fill it with random numbers
-  clientHeight = padding + title2Height + padding + title3Height + padding + numBlocks*(clientBlockHeight + padding);
+  clientHeight = padding + title2Height + padding + title3Height + padding + 
+    numBlocks * (clientBlockHeight + padding);
   for (var i = 0; i < numBlocks; i++) {
     posMap.push(Math.floor(Math.random() * numLeaves));
   }
 
   // update SVG to fit tree and position map
-  document.getElementById("oram").setAttributeNS(null, "width", serverX + serverWidth + bigpadding);
-  document.getElementById("oram").setAttributeNS(null, "height", clientY + Math.max(clientHeight, serverHeight) + bigpadding);
+  document.getElementById("oram").setAttributeNS(null, "width", serverX + 
+    serverWidth + bigPadding);
+  document.getElementById("oram").setAttributeNS(null, "height", clientY + 
+    Math.max(clientHeight, serverHeight) + bigPadding);
 
   // add client and server titles
   writeCenteredText("clienttitle",
-    clientX + 0.5*clientWidth,
-    clientY - 0.5*title1Height - padding,
+    clientX + 0.5 * clientWidth,
+    clientY - 0.5 * title1Height - padding,
     "Client",
     "title1");
 
   writeCenteredText("servertitle",
-    serverX + 0.5*serverWidth,
-    serverY - 0.5*title1Height - padding,
+    serverX + 0.5 * serverWidth,
+    serverY - 0.5 * title1Height - padding,
     "Server",
     "title1");
 
@@ -167,29 +174,30 @@ function fillTree() {
 function drawPosMap() {
 
   writeCenteredText("posmaptitle", 
-    posMapX + 0.5*posMapWidth, 
-    posMapY + 0.5*title2Height, 
+    posMapX + 0.5 * posMapWidth, 
+    posMapY + 0.5 * title2Height, 
     posMapTitle, 
     "title2");
 
   // find point between blockID column and assignedLeaf column 
   // so that both are centered within position map
-  var currX = posMapX + 0.5*posMapWidth - 0.5*(assignedLeafWidth - blockIDWidth);
+  var currX = posMapX + 0.5 * posMapWidth - 0.5 * 
+    (assignedLeafWidth - blockIDWidth);
   var currY = posMapY + title2Height + padding;
 
   // table header
   for (var word = 0; word < blockIDTitle.length; word++) {
     writeCenteredText("blockidsubtitle", 
-      currX - 0.5*(padding + blockIDWidth), 
-      currY + (0.25 + word*0.5)*title3Height, 
+      currX - 0.5 * (padding + blockIDWidth), 
+      currY + (0.25 + 0.5 * word) * title3Height, 
       blockIDTitle[word], 
       "title3");
   }
 
   for (var word = 0; word < assignedLeafTitle.length; word++) {
     writeCenteredText("assignedleafsubtitle", 
-      currX + 0.5*(padding + assignedLeafWidth), 
-      currY + (0.25 + word*0.5)*title3Height, 
+      currX + 0.5 * (padding + assignedLeafWidth), 
+      currY + (0.25 + 0.5 * word) * title3Height, 
       assignedLeafTitle[word], 
       "title3");
   }
@@ -202,33 +210,33 @@ function drawPosMap() {
 
     // block ID column
     createBlock("blockid" + item.toString(), 
-      currX - (0.5*padding + blockIDWidth), 
+      currX - (0.5 * padding + blockIDWidth), 
       currY , 
       blockIDWidth, 
       clientBlockHeight, 
       "clientblock blockid datablock" + item.toString());
     
     writeCenteredText("blockid" + item.toString() + "text", 
-      currX - 0.5*padding - 0.5*blockIDWidth, 
-      currY + 0.5*clientBlockHeight, 
+      currX - 0.5 * padding - 0.5 * blockIDWidth, 
+      currY + 0.5 * clientBlockHeight, 
       item.toString(), 
       // "clienttext datablock" + item.toString());
       "clienttext");
     
     // add new event listener for the block ID
-    document.getElementById("blockid" + item.toString()).addEventListener('click',accessBlock);
+    document.getElementById("blockid" + item.toString()).addEventListener('click', accessBlock);
 
     // assigned leaf column
     createBlock("assignedleaf" + item.toString(), 
-      currX + 0.5*padding, 
+      currX + 0.5 * padding, 
       currY, 
       assignedLeafWidth, 
       clientBlockHeight, 
       "clientblock");
 
     writeCenteredText("assignedleaf" + item.toString() + "text", 
-      currX + 0.5*padding + 0.5*assignedLeafWidth, 
-      currY + 0.5*clientBlockHeight, 
+      currX + 0.5 * padding + 0.5 * assignedLeafWidth, 
+      currY + 0.5 * clientBlockHeight, 
       (posMap[item]).toString(), 
       "clienttext");
 
@@ -244,26 +252,26 @@ function drawStash() {
   }
 
   writeCenteredText("stashtitle", 
-    stashX + 0.5*stashWidth, 
-    stashY + 0.5*title2Height, 
+    stashX + 0.5 * stashWidth, 
+    stashY + 0.5 * title2Height, 
     stashTitle, 
     "title2");
 
-  var currX = stashX + 0.5*stashWidth - 0.5*stashItemWidth;
+  var currX = stashX + 0.5 * stashWidth - 0.5 * stashItemWidth;
   // start of stash is horizontally aligned with start of position map
   var currY = stashY + title2Height + padding + title3Height + padding;
 
   for (var i = 0; i < stash.length; i++) {
     createBlock("stash" + i.toString(), 
       currX, 
-      currY + i*(clientBlockHeight + padding), 
+      currY + i * (clientBlockHeight + padding), 
       stashItemWidth, 
       clientBlockHeight, 
       "clientblock datablock" + stash[i]);
     
     writeCenteredText("stash" + i.toString() + "text", 
-      currX + 0.5*stashItemWidth, 
-      currY + 0.5*clientBlockHeight + i*(clientBlockHeight + padding), 
+      currX + 0.5 * stashItemWidth, 
+      currY + 0.5 * clientBlockHeight + i * (clientBlockHeight + padding), 
       "(" + stash[i].toString() + ",data)" , 
       "clienttext");
   }
@@ -272,31 +280,32 @@ function drawStash() {
 function drawTree() {
 
   writeCenteredText("treetitle", 
-    treeX + 0.5*totalTreeWidth, 
-    treeY + 0.5*title2Height, 
+    treeX + 0.5 * totalTreeWidth, 
+    treeY + 0.5 * title2Height, 
     treeTitle, 
     "title2");
 
   // draw the tree, starting at leaves
   var currRowX = treeX;
-  var currRowY = treeY + title2Height + padding + title3Height + padding + totalTreeHeight - treeBucketHeight;
+  var currRowY = treeY + title2Height + padding + title3Height + padding + 
+    totalTreeHeight - treeBucketHeight;
   var currBucketDistance = horizBucketDistance;
   
   for (var level = numLevels - 1; level >= 0; level--) {
 
     // draw blocks from left to right
-    for (var blockNum = 0; blockNum < Math.pow(2,level); blockNum++) {
+    for (var blockNum = 0; blockNum < Math.pow(2, level); blockNum++) {
       createBucket("treebucket-" + level.toString() + "-" + blockNum.toString(), 
-        currRowX + blockNum*(treeBucketWidth + currBucketDistance), 
+        currRowX + blockNum * (treeBucketWidth + currBucketDistance), 
         currRowY, 
         "treebucket", 
         "treeblock");
     }
 
     // prepare to start next row
-    currRowX += 0.5*(treeBucketWidth + currBucketDistance);
+    currRowX += 0.5 * (treeBucketWidth + currBucketDistance);
     currRowY -= (treeBucketHeight + vertLevelDistance);
-    currBucketDistance = 2*currBucketDistance + treeBucketWidth;
+    currBucketDistance = 2 * currBucketDistance + treeBucketWidth;
   }
 }
 
@@ -309,8 +318,9 @@ function highlightPath(leaf) {
 
   // start at the bottom of the tree
   for (var currLevel = numLevels-1; currLevel >= 0; currLevel--) {
-    var currBucketName = "treebucket-" + currLevel.toString() + "-" + currLeaf.toString();
-    document.getElementById(currBucketName).setAttributeNS(null,"class","treebucket highlighted");
+    var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
+      currLeaf.toString();
+    document.getElementById(currBucketName).setAttributeNS(null, "class", "treebucket highlighted");
   
     // shift bits to the right, filling in with 0s on left
     // kth node on level i is (k>>1)th node on level i-1
@@ -322,9 +332,10 @@ function highlightPath(leaf) {
 function clearHighlightedPaths() {
 
   for (var currLevel = 0; currLevel < numLevels; currLevel++) {
-    for (var currLeaf = 0; currLeaf < Math.pow(2,currLevel); currLeaf++) {
-      var currBucketName = "treebucket-" + currLevel.toString() + "-" + currLeaf.toString();
-      document.getElementById(currBucketName).setAttributeNS(null,"class","treebucket");
+    for (var currLeaf = 0; currLeaf < Math.pow(2, currLevel); currLeaf++) {
+      var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
+        currLeaf.toString();
+      document.getElementById(currBucketName).setAttributeNS(null, "class", "treebucket");
     }
   }
 }
@@ -359,8 +370,9 @@ function readPath(leaf) {
   // start at the bottom of the tree
   for (var currLevel = numLevels-1; currLevel >= 0; currLevel--) {
     
-    var currBucketName = "treebucket-" + currLevel.toString() + "-" + currLeaf.toString();
-    document.getElementById(currBucketName).setAttributeNS(null,"class","highlighted");
+    var currBucketName = "treebucket-" + currLevel.toString() + "-" + 
+      currLeaf.toString();
+    document.getElementById(currBucketName).setAttributeNS(null, "class", "highlighted");
 
     // read blocks in the current bucket from top to bottom
     for (var currBlock = 0; currBlock < blocksPerTreeBucket; currBlock++){
@@ -379,7 +391,7 @@ function readPath(leaf) {
 
       // "empty" the block
       document.getElementById(currBlockName + "text").textContent = "00000000";
-      document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock");
+      document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock");
     }
 
     // shift bits to the right, filling in with 0s on left
@@ -394,21 +406,27 @@ function updatePosMap(blockID) {
   if (debug) { console.log("updatePosMap: block ID " + blockID); }
 
   // highlight entry in posmap
-  document.getElementById("assignedleaf" + blockID).setAttributeNS(null,"class","highlighted");
+  document.getElementById("assignedleaf" + blockID).setAttributeNS(null, "class", "highlighted");
   // remap the block
   posMap[blockID] = Math.floor(Math.random() * numLeaves);
   document.getElementById("assignedleaf" + blockID + "text").textContent = posMap[blockID];
 
   // remove highlight from entry in posmap
-  setTimeout(function () {document.getElementById("assignedleaf" + blockID).setAttributeNS(null,"class","clientblock"); }, 1000, blockID);
+  setTimeout(function () {document.getElementById("assignedleaf" + blockID).setAttributeNS(null, "class", "clientblock"); }, 1000, blockID);
 }
 
 // using blocks from the stash, write a path back to the tree
 function writePath(leaf) {
 
-  if (debug) { console.log("writePath: leaf " + leaf); console.log("writePath: START stash is " + stash); }
+  if (debug) { 
+    console.log("writePath: leaf " + leaf); 
+    console.log("writePath: START stash is " + stash); 
+  }
 
-  if (leaf >= numLeaves || leaf < 0) { console.log("ERROR: leaf " + leaf); return; }
+  if (leaf >= numLeaves || leaf < 0) { 
+    console.log("ERROR: leaf " + leaf); 
+    return; 
+  }
 
   // start at the bottom of the tree
   for (var currLevel = numLevels-1; currLevel >= 0; currLevel--) {
@@ -416,7 +434,7 @@ function writePath(leaf) {
     var eligibleBlocks = []; // list of stash indices
     var stashElementsToRemove = [];
 
-    // check if any elements in the stash intersect this path at the current level
+    // check if any elements in the stash intersect this path at this level
     for (var i = 0; i < stash.length; i++) {
       if ( leaf>>>(numLevels-1-currLevel) == 
            ( (posMap[stash[i]])>>>(numLevels-1-currLevel) ) ) {
@@ -428,7 +446,8 @@ function writePath(leaf) {
     for (var currBlock = 0; currBlock < blocksPerTreeBucket; currBlock++){
 
       var currBlockName = "treebucket-" + currLevel.toString() + "-" + 
-        (leaf>>>(numLevels-1-currLevel)).toString() + "-" + currBlock.toString();
+        (leaf>>>(numLevels-1-currLevel)).toString() + "-" + 
+          currBlock.toString();
       var EncBlockValue = randomHex();
       
       if (eligibleBlocks.length > 0) {
@@ -436,12 +455,12 @@ function writePath(leaf) {
         var indexBlockToWrite = eligibleBlocks.shift();
         stashElementsToRemove.push(indexBlockToWrite);
         var blockToWrite = stash[indexBlockToWrite];
-        document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock datablock" + blockToWrite);
-        document.getElementById(currBlockName + "text").setAttributeNS(null,"class","treetext");
+        document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock datablock" + blockToWrite);
+        document.getElementById(currBlockName + "text").setAttributeNS(null, "class", "treetext");
       } else {
         // dummy data block
-        document.getElementById(currBlockName).setAttributeNS(null,"class","treeblock");
-        document.getElementById(currBlockName + "text").setAttributeNS(null,"class","treetext");
+        document.getElementById(currBlockName).setAttributeNS(null, "class", "treeblock");
+        document.getElementById(currBlockName + "text").setAttributeNS(null, "class", "treetext");
       }
       document.getElementById(currBlockName + "text").textContent = EncBlockValue;
     } // bucket is now full
@@ -450,31 +469,35 @@ function writePath(leaf) {
     // first sort indices in descending order so they can be removed "correctly"
     stashElementsToRemove.sort(function(a, b){return b-a;});
     while (stashElementsToRemove.length > 0) {
-      stash.splice(stashElementsToRemove.shift(),1);
+      stash.splice(stashElementsToRemove.shift(), 1);
     }
     drawStash();
   }
   if (debug) { console.log("writePath: END stash is " + stash); }
-  if (stash.length > 0) { console.log("writePath: wrote path to leaf " + leaf + " and stash was non-empty after: " + stash); }
+  if (stash.length > 0) { 
+    console.log("writePath: wrote path to leaf " + leaf + 
+      " and stash was non-empty after: " + stash); 
+  }
 }
 
 // blocks are in each column of the position map, in the stash, 
 // and in all tree buckets
 // coordinates are upper left
-function createBlock(blockID, blockX, blockY, blockWidth, blockHeight, blockClass) {
+function createBlock(blockID, blockX, blockY, blockWidth, blockHeight, 
+  blockClass) {
 
-  var newBlock = document.createElementNS(svguri,"rect"); 
-  newBlock.setAttributeNS(null,"id",blockID);
-  newBlock.setAttributeNS(null,"x",blockX);
-  newBlock.setAttributeNS(null,"y",blockY);
-  newBlock.setAttributeNS(null,"rx",4);
-  newBlock.setAttributeNS(null,"ry",4);
-  newBlock.setAttributeNS(null,"width",blockWidth);
-  newBlock.setAttributeNS(null,"height",blockHeight);
-  newBlock.setAttributeNS(null,"class",blockClass);
+  var newBlock = document.createElementNS(svguri, "rect"); 
+  newBlock.setAttributeNS(null, "id", blockID);
+  newBlock.setAttributeNS(null, "x", blockX);
+  newBlock.setAttributeNS(null, "y", blockY);
+  newBlock.setAttributeNS(null, "rx", 4);
+  newBlock.setAttributeNS(null, "ry", 4);
+  newBlock.setAttributeNS(null, "width", blockWidth);
+  newBlock.setAttributeNS(null, "height", blockHeight);
+  newBlock.setAttributeNS(null, "class", blockClass);
 
   // if this block is part of the stash, put it in the stash container
-  if (blockID.substring(0,5) == "stash") {
+  if (blockID.substring(0, 5) == "stash") {
     document.getElementById("stashcontainer").appendChild(newBlock);  
   } else {
     document.getElementById("oramcontainer").appendChild(newBlock);
@@ -484,15 +507,15 @@ function createBlock(blockID, blockX, blockY, blockWidth, blockHeight, blockClas
 // buckets are nodes in the tree
 function createBucket(bucketID, x, y) {
 
-  var newBucket = document.createElementNS(svguri,"rect"); 
-  newBucket.setAttributeNS(null,"id",bucketID);
-  newBucket.setAttributeNS(null,"x",x);
-  newBucket.setAttributeNS(null,"y",y);
-  newBucket.setAttributeNS(null,"rx",4);
-  newBucket.setAttributeNS(null,"ry",4);
-  newBucket.setAttributeNS(null,"width",treeBucketWidth);
-  newBucket.setAttributeNS(null,"height",treeBucketHeight);
-  newBucket.setAttributeNS(null,"class","treebucket");
+  var newBucket = document.createElementNS(svguri, "rect"); 
+  newBucket.setAttributeNS(null, "id", bucketID);
+  newBucket.setAttributeNS(null, "x", x);
+  newBucket.setAttributeNS(null, "y", y);
+  newBucket.setAttributeNS(null, "rx", 4);
+  newBucket.setAttributeNS(null, "ry", 4);
+  newBucket.setAttributeNS(null, "width", treeBucketWidth);
+  newBucket.setAttributeNS(null, "height", treeBucketHeight);
+  newBucket.setAttributeNS(null, "class", "treebucket");
 
   document.getElementById("oramcontainer").appendChild(newBucket);
 
@@ -503,14 +526,14 @@ function createBucket(bucketID, x, y) {
   for (var i = 0; i < blocksPerTreeBucket; i++) {
     createBlock(bucketID + "-" + i.toString(),
       x,
-      y + i*(treeBlockHeight + padding),
+      y + i * (treeBlockHeight + padding),
       treeBlockWidth,
       treeBlockHeight,
       "treeblock");
 
     writeCenteredText(bucketID + "-" + i.toString() + "text",
-      x + 0.5*treeBlockWidth,
-      y + 0.5*treeBlockHeight + i*(treeBlockHeight + padding),
+      x + 0.5 * treeBlockWidth,
+      y + 0.5 * treeBlockHeight + i * (treeBlockHeight + padding),
       randomHex(), "treetext");
   }
 }
@@ -518,19 +541,19 @@ function createBucket(bucketID, x, y) {
 // position is given by coords of center
 function writeCenteredText (textID, centerX, centerY, text, textClass) {
 
-  var newText = document.createElementNS(svguri,"text"); 
+  var newText = document.createElementNS(svguri, "text"); 
   var theText = document.createTextNode(text);
-  newText.setAttributeNS(null,"id",textID);
-  newText.setAttributeNS(null,"text-anchor","middle");
-  newText.setAttributeNS(null,"dominant-baseline","central");
-  newText.setAttributeNS(null,"x",centerX);
-  newText.setAttributeNS(null,"y",centerY);
-  newText.setAttributeNS(null,"class",textClass);
-  newText.setAttributeNS(null,"stroke",textClass);
+  newText.setAttributeNS(null, "id", textID);
+  newText.setAttributeNS(null, "text-anchor", "middle");
+  newText.setAttributeNS(null, "dominant-baseline", "central");
+  newText.setAttributeNS(null, "x", centerX);
+  newText.setAttributeNS(null, "y", centerY);
+  newText.setAttributeNS(null, "class", textClass);
+  newText.setAttributeNS(null, "stroke", textClass);
   newText.appendChild(theText);
 
   // if this text is part of the stash, put it in the stash container
-  if (textID.substring(0,5) == "stash") {
+  if (textID.substring(0, 5) == "stash") {
     document.getElementById("stashcontainer").appendChild(newText);  
   } else {
     document.getElementById("oramcontainer").appendChild(newText);

@@ -33,7 +33,7 @@
     where each node is a bucket of blocks.</p>
 
     <h3>1. Pick how many blocks to store (1-64) and how many blocks per bucket 
-    (1-4).</h3>
+    (1-5).</h3>
     
     <!-- "return false" is necessary to prevent page refresh -->
     <form onsubmit="updateORAM(); return false">
@@ -42,13 +42,11 @@
       <br /><br />
       <label for="blocksPerTreeBucket">Number of data blocks per bucket (Z):
         </label>
-      <input id="blocksPerTreeBucket" type="number" min="1" max="4" value="4" />
+      <input id="blocksPerTreeBucket" type="number" min="1" max="5" value="4" />
       <input id="goButton" type="submit" value="Go!" />
     </form>
 
-    <p>The number of levels of the tree is the ceiling of the base-2 logarithm 
-    of N (which makes sense when Z=3 or 4... What about when Z is something 
-    else?)</p>
+    <p>The number of levels of the tree is &lceil;log N&rceil;.</p>
 
     <h3>2. Click on a block ID in the position map to access that block.</h3>
 

@@ -369,7 +369,7 @@ function readPath(leaf) {
       
       // class should be either "treeblock" or "treeblock datablock##"
       if ($("#" + currBlockName).attr("class").length > 9) {
-        blockData = $("#" + currBlockName).attr("class").substring(19);
+        var blockData = $("#" + currBlockName).attr("class").substring(19);
 
         // if it's not dummy data, add it to the stash
         if (Number(blockData) < 0 || Number(blockData) >= numBlocks) { return; }

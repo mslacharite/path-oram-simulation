@@ -26,14 +26,23 @@
     <p>Path ORAM (<a href="https://eprint.iacr.org/2013/280">eprint</a>, 
     <a href="https://dl.acm.org/citation.cfm?id=2516660">ACM DL</a>) 
     is an "extremely simple oblivious RAM protocol" by Stefanov et al., 
-    presented at CCS 2013.</p>
+    presented at CCS '13.
+    In path ORAM, the client (data owner) stores a <b>position map</b> and 
+    a <b>stash</b>, while the server stores a binary <b>tree</b> where each node is 
+    a bucket of blocks.</p>
 
-    <p>In path ORAM, the client stores a position map and a stash (which is 
-    usually empty after each block access), while the server stores a tree 
-    where each node is a bucket of blocks.</p>
+    <p>The purpose of this simulation is to visualize how data moves in the 
+    tree as blocks are accessed (read or written).</p>
 
-    <h3>1. Pick how many blocks to store (1-64) and how many blocks per bucket 
-    (1-5).</h3>
+    <p>In a real implementation of path ORAM, all stored blocks are 
+      probabilistically encrypted. 
+      In this simulation, the hex strings in the tree represent this encrypted 
+      data.
+      The colours correspond to the underlying block: real blocks are coloured 
+      and dummy blocks are grey. </p>
+
+    <h3>1. Pick how many blocks to store (1&ndash;64) and how many blocks there 
+    are per bucket (1&ndash;5).</h3>
     
     <!-- "return false" is necessary to prevent page refresh -->
     <form onsubmit="updateORAM(); return false">
@@ -46,17 +55,22 @@
       <input id="goButton" type="submit" value="Go!" />
     </form>
 
-    <p>The number of levels of the tree is &lceil;log N&rceil;.</p>
+    <p>The number of levels of the tree is &lceil;log N&rceil;.
+    The greater the number of blocks per bucket, the lower the probability 
+    that buckets overflow (and hence the lower the probability that the 
+    stash isn't empty after a block access).
+    The authors of path ORAM proved bounds on stash usage for <i>Z</i> = 5, 
+    but they observed that <i>Z</i> = 4 worked fine in practice. </p>
 
     <h3>2. Click on a block ID in the position map to access that block.</h3>
 
-    <p>A block access is either a read or a write operation. 
-      In a real implementation of path ORAM, all stored blocks are 
-      probabilistically encrypted. 
-      In this simulation, the hex strings in the tree represent this encrypted 
-      data.
-      The colours correspond to the underlying block: real blocks are coloured 
-      and dummy blocks are grey. </p>
+    <p>You won't see the transient use of the stash&mdash;although all blocks 
+    in the path from the root to the block's assigned leaf are momentarily 
+    placed in the stash, this happens too fast.</p>
+
+    <p>The block you access should end up in the root node with probability 
+    1/2.</p>
+
   </div>
 
   <svg id="oram" version="1.1" xmlns="http://www.w3.org/2000/svg" 
